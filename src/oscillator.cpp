@@ -21,7 +21,7 @@ void Oscillator::setSinWave(float amplitude, float frequency, float phase_offset
 	std::cout<<"Setting Sinus Wave...";
 
 	//dont know why but works
-	frequency*=568.181818;
+	frequency*=PITCH_CORRECT;
 	for(int i=0; i<wave_.size()/4; i++)
 	{
 		// std::cout<<amplitude * sin((2 * PI * frequency * i/wave_.size()) * PI/180)<<"\n";
@@ -33,17 +33,50 @@ void Oscillator::setSinWave(float amplitude, float frequency, float phase_offset
 void Oscillator::setSawWave(float amplitude, float frequency)
 {
 	std::cout<<"Setting Saw Wave...";
-	frequency*=568.181818;
+	frequency*=PITCH_CORRECT;
 	for(int i=0; i<wave_.size(); i++)
 	{
 		float sum=0;
-		for(int j=1; j<=200; j++)
+		for(int j=1; j<=FOURIER_PARAM; j++)
 		{
 			sum += sin(2.0f * PI * j * frequency * ((float)(i)/(float)(wave_.size())) * (PI/180.0f))/j;
 		}
 		wave_[i]=(amplitude/2) - (amplitude/PI * sum);
 	}
 	std::cout<<"Done\n";
+}
+
+void Oscillator::setSquareWave(float amplitude, float frequency)
+{
+	std::cout<<"Setting Square Wave...";
+	frequency*=PITCH_CORRECT;
+	for(int i=0; i<wave_.size(); i++)
+	{
+		float sum=0;
+		for(int j=1; j<=FOURIER_PARAM; j++)
+		{
+			sum += sin((2.0f * j - 1.0f) * 2.0f * PI * frequency * (float)(i)/(float)(wave_.size()) * PI/180.0f)/(2.0f * j - 1.0f);
+		}
+
+		wave_[i] = 4.0f * amplitude / PI * sum;
+	}
+	std::cout<<"Done.\n";
+}
+
+void Oscillator::setTriangleWave(float amplitude, float frequency)
+{
+	std::cout<<"Setting Triangle Wave...";
+	frequency*=PITCH_CORRECT;
+	for(int i=0; i<wave_.size(); i++)
+	{
+		float sum=0;
+		for(int j=0; j<FOURIER_PARAM; j++)
+		{
+			sum += pow(-1.0, j) * (sin(2.0f * PI * (2.0f * j + 1) * frequency * (float)(i)/(float)(wave_.size()) * PI/180.0f) / pow((2.0f * j + 1), 2.0f));
+		}
+		wave_[i]=amplitude/pow(PI, 2.0) * sum;
+	}
+	std::cout<<"Done.\n";
 }
 
 float* Oscillator::getWaveArray() const

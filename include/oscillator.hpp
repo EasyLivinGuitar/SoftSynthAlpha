@@ -10,6 +10,8 @@
 #include <iostream>
 
 #define PI 3.14
+#define PITCH_CORRECT 568.181818
+#define FOURIER_PARAM 200
 
 class Oscillator
 {
@@ -20,6 +22,8 @@ class Oscillator
 
 		void setSinWave(float amplitude, float frequency, float phase_offset);
 		void setSawWave(float amplitude, float frequency);
+		void setSquareWave(float amplitude, float frequency);
+		void setTriangleWave(float amplitude, float frequency);
 
 		float* getWaveArray() const;
 		std::vector<float> getWaveVector() const;
