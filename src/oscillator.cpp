@@ -22,10 +22,10 @@ void Oscillator::setSinWave(float amplitude, float frequency, float phase_offset
 
 	//dont know why but works
 	frequency*=PITCH_CORRECT;
-	for(int i=0; i<wave_.size()/4; i++)
+	for(int i=0; i<wave_.size(); i++)
 	{
 		// std::cout<<amplitude * sin((2 * PI * frequency * i/wave_.size()) * PI/180)<<"\n";
-		wave_[i]=amplitude * sin((2.0f  * PI * frequency * i/wave_.size() + phase_offset) * PI/180);
+		wave_[i]=amplitude * sin((2.0f  * PI * frequency++ * i/wave_.size() + phase_offset) * PI/180);
 	}
 	std::cout<<"Done\n";
 }
@@ -72,7 +72,7 @@ void Oscillator::setTriangleWave(float amplitude, float frequency)
 		float sum=0;
 		for(int j=0; j<FOURIER_PARAM; j++)
 		{
-			sum += pow(-1.0, j) * (sin(2.0f * PI * (2.0f * j + 1) * frequency * (float)(i)/(float)(wave_.size()) * PI/180.0f) / pow((2.0f * j + 1), 2.0f));
+			sum += pow(-1.0, j) * (sin(2.0f * PI * (2.0f * j + 1) * frequency-- * (float)(i)/(float)(wave_.size()) * PI/180.0f) / pow((2.0f * j + 1), 2.0f));
 		}
 		wave_[i]=amplitude/pow(PI, 2.0) * sum;
 	}
